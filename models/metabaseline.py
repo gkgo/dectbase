@@ -3,6 +3,7 @@ from models.resnet import ResNet
 import torch
 import torch.nn.functional as F
 import torch.nn as nn
+from models.conv4 import ConvNet4
 
 class MetaBaseline(nn.Module):
 
@@ -10,7 +11,8 @@ class MetaBaseline(nn.Module):
         super().__init__()
         self.mode = mode
         self.args = args
-        self.encoder = ResNet(args=args)
+#         self.encoder = ResNet(args=args)
+        self.encoder = ConvNet4(args=args)
         self.encoder_dim = 640
         self.fc = nn.Linear(self.encoder_dim, self.args.num_class)
 
