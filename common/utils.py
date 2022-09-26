@@ -19,7 +19,7 @@ def setup_run(arg_mode='train'):
     ensure_path(args.save_path)
 
     if not args.no_wandb:
-        wandb.init(project=f'scnet-{args.dataset}-{args.way}w{args.shot}s',
+        wandb.init(project=f'Metabaseline-{args.dataset}-{args.way}w{args.shot}s',
                    config=args,
                    save_code=True,
                    name=args.extra_dir)
@@ -129,7 +129,7 @@ def by(s):
 
 
 def parse_args(arg_mode):
-    parser = argparse.ArgumentParser(description='Relational Embedding for Few-Shot Classification (ICCV 2021)')
+    parser = argparse.ArgumentParser(description='Metabaseline')
 
     ''' about dataset '''
     parser.add_argument('-dataset', type=str, default='cub',
