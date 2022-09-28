@@ -139,7 +139,7 @@ def parse_args(arg_mode):
     ''' about training specs '''
     parser.add_argument('-batch', type=int, default=64, help='auxiliary batch size')
     parser.add_argument('-temperature', type=float, default=0.20, metavar='tau', help='temperature for metric-based loss')
-    parser.add_argument('-lamb', type=float, default=0.75, metavar='lambda', help='loss balancing term')
+    parser.add_argument('-lamb', type=float, default=0.50, metavar='lambda', help='loss balancing term')
 
     ''' about training schedules '''
     parser.add_argument('-max_epoch', type=int, default=80, help='max epoch to run')
