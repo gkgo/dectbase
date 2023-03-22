@@ -11,8 +11,8 @@ class MetaBaseline(nn.Module):
         super().__init__()
         self.mode = mode
         self.args = args
-#         self.encoder = ResNet(args=args)
-        self.encoder = ConvNet4(args=args)
+        self.encoder = ResNet(args=args)
+#         self.encoder = ConvNet4(args=args)
         self.encoder_dim = 640
         self.fc = nn.Linear(self.encoder_dim, self.args.num_class)
 
