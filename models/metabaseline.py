@@ -58,8 +58,8 @@ class MetaBaseline(nn.Module):
         d_q = F.softmax(d_q / self.args.temperature_attn, dim=3)
         d_q = d_q.view(num_qry, way,640,H_q, W_q)  # 10，5，5，5，5，5
         
-        spt_attended = d_s * spt.unsqueeze(0)  # 10，5，640，5，5
-        qry_attended = d_q * qry.unsqueeze(1)  # 10，5，640，5，5
+        spt_attended = d_s + spt.unsqueeze(0)  # 10，5，640，5，5
+        qry_attended = d_q + qry.unsqueeze(1)  # 10，5，640，5，5
 #_____________________________________________________________________________________
         # averaging embeddings for k > 1 shots
         if self.args.shot > 1:
