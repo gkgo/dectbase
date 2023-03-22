@@ -144,11 +144,6 @@ class ResNet(nn.Module):
 
         x = self.layer4(x)
         
-        identity = x
-
-        x = self.scr_module(x)
-
-
-        x = x + identity
+ 
 
         return x
