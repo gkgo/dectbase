@@ -1,6 +1,6 @@
-import torch.nn as nn
-
-
+# import torch.nn as nn
+#
+#
 # def conv_block(in_channels, out_channels):
 #     return nn.Sequential(
 #         nn.Conv2d(in_channels, out_channels, 3, padding=1),
@@ -8,9 +8,9 @@ import torch.nn as nn
 #         nn.ReLU(),
 #         nn.MaxPool2d(2)
 #     )
-
+#
 # class ConvNet4(nn.Module):
-
+#
 #     def __init__(self,args, x_dim=3, hid_dim=64, z_dim=640):
 #         super().__init__()
 #         self.args = args
@@ -20,7 +20,7 @@ import torch.nn as nn
 #             conv_block(hid_dim, hid_dim),
 #             conv_block(hid_dim, z_dim),
 #         )
-
+#
 #     def forward(self, x):
 #         x = self.encoder(x)
 #         return x
@@ -207,16 +207,21 @@ def conv_block(in_channels, out_channels):
     )
 
 class ConvNet4(nn.Module):
-
     def __init__(self,args, x_dim=3, hid_dim=64, z_dim=640):
         super().__init__()
         self.args = args
+        # self.encoder = nn.Sequential(
+        #     conv_block(x_dim, hid_dim),
+        #     conv_block(hid_dim, hid_dim*2),
+        #     conv_block(hid_dim*2, hid_dim*4),
+        #     conv_block(hid_dim*4, z_dim),
+        # )
         self.conv_block1 = conv_block(x_dim, hid_dim)
         self.conv_block2 = conv_block(hid_dim, 160)
         self.conv_block3 = conv_block(160, 320)
         self.conv_block4 = conv_block(320, z_dim)
         self.avgpool = nn.AdaptiveAvgPool2d((1, 1))
-#         self.fc = nn.Linear(640, num_classes)
+        # self.fc = nn.Linear(640, num_classes)
         self.scr_module0 = mySelfCorrelationComputation(channel=64,kernel_size=(1, 1), padding=0)
         self.scr_module1 = mySelfCorrelationComputation(channel=160, kernel_size=(1, 1), padding=0)
         self.scr_module2 = mySelfCorrelationComputation(channel=320, kernel_size=(1, 1), padding=0)
@@ -249,26 +254,26 @@ class ConvNet4(nn.Module):
 
         out4 = self.conv_block4(out3)
         out4_s = self.scr_module(out4)
-        out4 = out4 + out4_s
+        x = out4 + out4_s
 
 
 #___________________________________________________________
-#         out2 = F.avg_pool2d(out2, out2.size()[2:])
-#         out3 = F.avg_pool2d(out3, out3.size()[2:])
-#         out4 = F.avg_pool2d(out4, out4.size()[2:])
+        # out2 = F.avg_pool2d(out2, out2.size()[2:])
+        # out3 = F.avg_pool2d(out3, out3.size()[2:])
+        # out4 = F.avg_pool2d(out4, out4.size()[2:])
+        #
+        # out2 = F.layer_norm(out2, out2.size()[1:])
+        # out3 = F.layer_norm(out3, out3.size()[1:])
+        # out4 = F.layer_norm(out4, out4.size()[1:])
 
-#         out2 = F.layer_norm(out2, out2.size()[1:])
-#         out3 = F.layer_norm(out3, out3.size()[1:])
-#         out4 = F.layer_norm(out4, out4.size()[1:])
-
-        out = torch.cat([out4,out3,out2], 1)
-        out = self.conv1x1_out(out)
-        out = self.relu(out)
-        out = self.maxpool(out)
+        # out = torch.cat([out4,out3,out2], 1)
+        # out = self.conv1x1_out(out4)
+        # out = self.relu(out4)
+        # x = self.maxpool(out)
 
 #__________________________________________
-#         x = self.avgpool(out)
-#         x = x.view(x.size(0), -1)
-#         x = self.fc(x)
+        # x = self.avgpool(out)
+        # x = x.view(x.size(0), -1)
+        # x = self.fc(x)
 
         return x
