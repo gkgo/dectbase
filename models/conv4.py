@@ -216,7 +216,7 @@ class ConvNet4(nn.Module):
         self.conv_block3 = conv_block(160, 320)
         self.conv_block4 = conv_block(320, z_dim)
         self.avgpool = nn.AdaptiveAvgPool2d((1, 1))
-        self.fc = nn.Linear(640, num_classes)
+#         self.fc = nn.Linear(640, num_classes)
         self.scr_module0 = mySelfCorrelationComputation(channel=64,kernel_size=(1, 1), padding=0)
         self.scr_module1 = mySelfCorrelationComputation(channel=160, kernel_size=(1, 1), padding=0)
         self.scr_module2 = mySelfCorrelationComputation(channel=320, kernel_size=(1, 1), padding=0)
