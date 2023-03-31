@@ -208,14 +208,9 @@ def conv_block(in_channels, out_channels):
 
 class ConvNet4(nn.Module):
 
-    def __init__(self, num_classes, x_dim=3, hid_dim=64, z_dim=640):
+    def __init__(self,args, x_dim=3, hid_dim=64, z_dim=640):
         super().__init__()
-        # self.encoder = nn.Sequential(
-        #     conv_block(x_dim, hid_dim),
-        #     conv_block(hid_dim, hid_dim*2),
-        #     conv_block(hid_dim*2, hid_dim*4),
-        #     conv_block(hid_dim*4, z_dim),
-        # )
+        self.args = args
         self.conv_block1 = conv_block(x_dim, hid_dim)
         self.conv_block2 = conv_block(hid_dim, 160)
         self.conv_block3 = conv_block(160, 320)
@@ -258,13 +253,13 @@ class ConvNet4(nn.Module):
 
 
 #___________________________________________________________
-        out2 = F.avg_pool2d(out2, out2.size()[2:])
-        out3 = F.avg_pool2d(out3, out3.size()[2:])
-        out4 = F.avg_pool2d(out4, out4.size()[2:])
+#         out2 = F.avg_pool2d(out2, out2.size()[2:])
+#         out3 = F.avg_pool2d(out3, out3.size()[2:])
+#         out4 = F.avg_pool2d(out4, out4.size()[2:])
 
-        out2 = F.layer_norm(out2, out2.size()[1:])
-        out3 = F.layer_norm(out3, out3.size()[1:])
-        out4 = F.layer_norm(out4, out4.size()[1:])
+#         out2 = F.layer_norm(out2, out2.size()[1:])
+#         out3 = F.layer_norm(out3, out3.size()[1:])
+#         out4 = F.layer_norm(out4, out4.size()[1:])
 
         out = torch.cat([out4,out3,out2], 1)
         out = self.conv1x1_out(out)
