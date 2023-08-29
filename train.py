@@ -10,7 +10,7 @@ from common.meter import Meter
 from common.utils import  compute_accuracy, set_seed, setup_run
 from models.dataloader.samplers import CategoriesSampler
 from models.dataloader.data_utils import dataset_builder
-from models.metabase import MetaBaseline
+from models.metabaseline import MetaBaseline
 from test import test_main, evaluate
 
 
