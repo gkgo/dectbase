@@ -52,17 +52,19 @@ class MetaBaseline(nn.Module):
         qry_c = qry_c.unsqueeze(1).repeat(1, way, 1, 1, 1)
         d_s = spt_c.view(num_qry, way,640,H_s*W_s)  # 10，5，25，5，5
         d_q = qry_c.view(num_qry, way,640,H_q*W_q)  # 10，5，5，5，25
-        d_s = self.gaussian_normalize(d_s, dim=3)
-        d_q = self.gaussian_normalize(d_q, dim=3)
+        # d_s = self.gaussian_normalize(d_s, dim=3)
+        # d_q = self.gaussian_normalize(d_q, dim=3)
         
         # applying softmax for each side
-        d_s = F.softmax(d_s / self.args.temperature_attn, dim=3)
+        # d_s = F.softmax(d_s / self.args.temperature_attn, dim=3)
         d_s = d_s.view(num_qry, way,640,H_s, W_s)  # 10，5，5，5，5，5
-        d_q = F.softmax(d_q / self.args.temperature_attn, dim=3)
+        # d_q = F.softmax(d_q / self.args.temperature_attn, dim=3)
         d_q = d_q.view(num_qry, way,640,H_q, W_q)  # 10，5，5，5，5，5
         
-        spt_attended = d_s * spt.unsqueeze(0)  # 10，5，640，5，5
-        qry_attended = d_q * qry.unsqueeze(1)  # 10，5，640，5，5
+        # spt_attended = d_s * spt.unsqueeze(0)  # 10，5，640，5，5
+        # qry_attended = d_q * qry.unsqueeze(1)  # 10，5，640，5，5
+        spt_attended = d_s   # 10，5，640，5，5
+        qry_attended = d_q   # 10，5，640，5，5
 #_____________________________________________________________________________________
         # averaging embeddings for k > 1 shots
         if self.args.shot > 1:
