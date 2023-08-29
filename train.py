@@ -44,14 +44,14 @@ def train(epoch, model, loader, optimizer, args=None):
         model.module.mode = 'baseline'
         data_shot, data_query = data[:k], data[k:]
         logits, absolute_logits = model((data_shot.unsqueeze(0).repeat(args.num_gpu, 1, 1, 1, 1), data_query))
-        epi_loss = F.cross_entropy(logits, label)
-        absolute_loss = F.cross_entropy(absolute_logits, train_labels[k:])
+        epi_loss = F.cross_entropy(logits, label)#loss3
+        absolute_loss = F.cross_entropy(absolute_logits, train_labels[k:])#loss2
 
         # loss for auxiliary batch
         model.module.mode = 'fc'
         logits_aux = model(data_aux)
-        loss_aux = F.cross_entropy(logits_aux, train_labels_aux)
-        loss_aux = loss_aux + absolute_loss
+        loss_aux = F.cross_entropy(logits_aux, train_labels_aux)#loss1
+        # loss_aux = loss_aux + absolute_loss#L
 
         loss = args.lamb * epi_loss + loss_aux
         acc = compute_accuracy(logits, label)
