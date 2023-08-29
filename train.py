@@ -51,7 +51,7 @@ def train(epoch, model, loader, optimizer, args=None):
         model.module.mode = 'fc'
         logits_aux = model(data_aux)
         loss_aux = F.cross_entropy(logits_aux, train_labels_aux)#loss1
-        # loss_aux = loss_aux + absolute_loss#L
+        loss_aux = loss_aux + absolute_loss#L
         
         loss = loss_aux
         # loss = args.lamb * epi_loss + loss_aux
