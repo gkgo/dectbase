@@ -10,7 +10,7 @@ from common.meter import Meter
 from common.utils import  compute_accuracy, set_seed, setup_run
 from models.dataloader.samplers import CategoriesSampler
 from models.dataloader.data_utils import dataset_builder
-from models.metabaseline import MetaBaseline
+from models.metabase import MetaBaseline
 from test import test_main, evaluate
 
 
@@ -21,7 +21,7 @@ def train(epoch, model, loader, optimizer, args=None):
     train_loader_aux = loader['train_loader_aux']
 
     # label for query set, always in the same pattern
-    label = torch.arange(args.way).repeat(args.query).cuda()  # 432104321043210....
+    label = torch.arange(args.way).repeat(args.query).cuda()  # 012340123401234....
 
 
     loss_meter = Meter()
@@ -37,24 +37,23 @@ def train(epoch, model, loader, optimizer, args=None):
 
         # Forward images (3, 84, 84) -> (C, H, W)
         model.module.mode = 'encoder'
-        data = model(data)
-        data_aux = model(data_aux)  # I prefer to separate feed-forwarding data and data_aux due to BN
+        data = model(data)  # meta
+        data_aux = model(data_aux)  # base 
 
         # loss for batch
         model.module.mode = 'baseline'
         data_shot, data_query = data[:k], data[k:]
         logits, absolute_logits = model((data_shot.unsqueeze(0).repeat(args.num_gpu, 1, 1, 1, 1), data_query))
-        epi_loss = F.cross_entropy(logits, label)#loss3
-        absolute_loss = F.cross_entropy(absolute_logits, train_labels[k:])#loss2
+        epi_loss = F.cross_entropy(logits, label) # loss3
+        absolute_loss = F.cross_entropy(absolute_logits, train_labels[k:]) # loss2
 
         # loss for auxiliary batch
         model.module.mode = 'fc'
         logits_aux = model(data_aux)
         loss_aux = F.cross_entropy(logits_aux, train_labels_aux)#loss1
-        loss_aux1 = absolute_loss#L
-        # loss_aux = loss_aux + absolute_loss#L
-        
-        loss = args.lamb * epi_loss + loss_aux1
+        loss_aux = loss_aux + absolute_loss
+
+        loss = args.lamb * epi_loss + loss_aux
         acc = compute_accuracy(logits, label)
 
         loss_meter.update(loss.item())
