@@ -4,7 +4,7 @@ from common.utils import set_seed
 def dataset_builder(args):
     set_seed(args.seed)  # fix random seed for reproducibility
 
-    if args.dataset == 'miniimagenet':
+    if args.dataset == 'mini':
         from models.dataloader.mini_imagenet import MiniImageNet as Dataset
     elif args.dataset == 'cub':
         from models.dataloader.cub import CUB as Dataset
