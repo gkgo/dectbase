@@ -34,8 +34,8 @@ def setup_run(arg_mode='train'):
         args.num_class = 351
     elif args.dataset == 'cifar_fs':
         args.num_class = 64
-    elif args.dataset == 'cars':
-        args.num_class = 130
+    elif args.dataset == 'mini':
+        args.num_class = 10
     elif args.dataset == 'dogs':
         args.num_class = 70
 
@@ -132,8 +132,8 @@ def parse_args(arg_mode):
     parser = argparse.ArgumentParser(description='Metabaseline')
 
     ''' about dataset '''
-    parser.add_argument('-dataset', type=str, default='cub',
-                        choices=['miniimagenet', 'cub', 'tieredimagenet', 'cifar_fs'])
+    parser.add_argument('-dataset', type=str, default='mini',
+                        choices=['miniimagenet', 'cub', 'tieredimagenet', 'cifar_fs','mini'])
     parser.add_argument('-data_dir', type=str, default='datasets', help='dir of datasets')
 
     ''' about training specs '''
